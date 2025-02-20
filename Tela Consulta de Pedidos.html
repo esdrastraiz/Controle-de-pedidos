@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consultar Pedido</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Consultar Pedido</h1>
+        <form @submit.prevent="consultarPedidos">
+            <label for="dataCadastro">Data Cadastro:</label>
+            <input type="date" v-model="dataCadastro" id="dataCadastro">
+
+            <br><br>
+
+            <button type="submit">Consultar</button>
+        </form>
+
+        <h2>Pedidos</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Produto</th>
+                    <th>Valor</th>
+                    <th>Quantidade</th>
+                    <th>Data/Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="pedido in pedidos">
+                    <td>{{ pedido.cliente }}</td>
+                    <td>{{ pedido.produto }}</td>
+                    <td>{{ pedido.valor }}</td>
+                    <td>{{ pedido.quantidade }}</td>
+                    <td>{{ pedido.data_hora }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                dataCadastro: '',
+                pedidos: []
+            },
+            methods: {
+                consultarPedidos() {
+                    const data = this.dataCadastro ? `?data=${this.dataCadastro}` : '';
+                    fetch(`consultarPedidos.php${data}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.pedidos = data;
+                        });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

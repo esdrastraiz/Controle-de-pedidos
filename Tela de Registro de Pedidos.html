@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registrar Pedido</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Registrar Pedido</h1>
+        <form @submit.prevent="adicionarItem">
+            <label for="cliente">Cliente:</label>
+            <select v-model="cliente" id="cliente" required>
+                <option v-for="option in clientes" :value="option">{{ option }}</option>
+            </select>
+
+            <br><br>
+
+            <label for="produto">Produto:</label>
+            <select v-model="produto" id="produto" required>
+                <option v-for="option in produtos" :value="option">{{ option }}</option>
+            </select>
+
+            <br><br>
+
+            <label for="valor">Valor:</label>
+            <input type="text" v-model="valor" id="valor" required pattern="^\d+(\.\d{1,2})?$" placeholder="0.00">
+
+            <br><br>
+
+            <label for="quantidade">Quantidade:</label>
+            <input type="text" v-model="quantidade" id="quantidade" required pattern="^\d+$" placeholder="0">
+
+            <br><br>
+
+            <button type="submit">Inserir no Carrinho</button>
+        </form>
+
+        <h2>Resumo do Pedido</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in itens">
+                    <td>{{ item.produto }}</td>
+                    <td>{{ item.quantidade }}</td>
+                    <td>{{ item.valor }}</td>
+                    <td>{{ item.valorTotal }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                cliente: '',
+                produto: '',
+                valor: '',
+                quantidade: '',
+                itens: [],
+                clientes: ['Cliente1', 'Cliente2', 'Cliente3'],
+                produtos: ['Produto1', 'Produto2', 'Produto3']
+            },
+            methods: {
+                adicionarItem() {
+                    const item = {
+                        produto: this.produto,
+                        quantidade: this.quantidade,
+                        valor: this.valor,
+                        valorTotal: (parseFloat(this.valor) * parseInt(this.quantidade)).toFixed(2)
+                    };
+                    this.itens.push(item);
+                    this.produto = '';
+                    this.quantidade = '';
+                    this.valor = '';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
